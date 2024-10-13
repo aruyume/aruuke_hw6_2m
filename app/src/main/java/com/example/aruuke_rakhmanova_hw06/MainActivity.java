@@ -1,31 +1,21 @@
 package com.example.aruuke_rakhmanova_hw06;
 
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.aruuke_rakhmanova_hw06.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
+    ActivityMainBinding binding;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        EditText username = findViewById(R.id.edd1);
-        EditText password = findViewById(R.id.edd2);
-        Button button = findViewById(R.id.edd3);
-        TextView tv1 = findViewById(R.id.vhod);
-        TextView welcome = findViewById(R.id.welcome);
-        TextView tv3 = findViewById(R.id.op);
-        TextView tv4 = findViewById(R.id.zp);
-        TextView tv5 = findViewById(R.id.z6);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -34,10 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (username.getText().length() > 0 && password.getText().length() > 0) {
-                    button.setBackgroundResource(R.drawable.ed4);
+                if (binding.etEmail.getText().length() > 0 && binding.etPassword.getText().length() > 0) {
+                    binding.btnSignIn.setBackgroundResource(R.drawable.bg_btn_orange);
                 } else {
-                    button.setBackgroundResource(R.drawable.ed3);
+                    binding.btnSignIn.setBackgroundResource(R.drawable.bg_btn_gray);
                 }
             }
 
@@ -45,24 +35,25 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         };
+        binding.etEmail.addTextChangedListener(textWatcher);
+        binding.etPassword.addTextChangedListener(textWatcher);
 
-        username.addTextChangedListener(textWatcher);
-        password.addTextChangedListener(textWatcher);
-
-        button.setOnClickListener(v -> {
-            String userText = username.getText().toString();
-            String passText = password.getText().toString();
-            if ("admin".equals(userText) && "admin".equals(passText)) {
+        binding.btnSignIn.setOnClickListener(v -> {
+            String username = binding.etEmail.getText().toString();
+            String password = binding.etPassword.getText().toString();
+            if ("admin".equals(username) && "admin".equals(password)) {
                 Toast.makeText(this, "Вы успешно зарегистрировались", Toast.LENGTH_SHORT).show();
-                welcome.setText("Добро пожаловать, " + userText + "!");
-                welcome.setVisibility(View.VISIBLE);
-                tv3.setVisibility(View.GONE);
-                tv1.setVisibility(View.GONE);
-                tv4.setVisibility(View.GONE);
-                tv5.setVisibility(View.GONE);
-                username.setVisibility(View.GONE);
-                password.setVisibility(View.GONE);
-                button.setVisibility(View.GONE);
+                binding.tvWelcome.setText("Добро пожаловать, " + username + "!");
+
+                binding.tvWelcome.setVisibility(View.VISIBLE);
+                binding.tvDescription.setVisibility(View.GONE);
+                binding.tvForgotPassword.setVisibility(View.GONE);
+                binding.tvTapHere.setVisibility(View.GONE);
+                binding.tvEnter.setVisibility(View.GONE);
+                binding.etEmail.setVisibility(View.GONE);
+                binding.etPassword.setVisibility(View.GONE);
+                binding.btnSignIn.setVisibility(View.GONE);
+
             } else {
                 Toast.makeText(this, "Неправильный логин или пароль", Toast.LENGTH_SHORT).show();
             }
